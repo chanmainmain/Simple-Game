@@ -1,0 +1,32 @@
+body {
+  background-color: #ffe0b2;
+}
+
+#game {
+  background-color: #ffb74d;
+  width: 500px;
+  margin: 200px auto;
+}
+
+#btn,
+#result {
+  padding: 10px;
+}
+
+#result{
+  margin: 200px auto;
+}
+
+.container{
+  background-color: #ffb74d;
+  border-radius: 30px;
+  padding: 10px;
+  color: #eceff1;
+  margin: 200px auto;
+}
+
+.btn{
+  border-radius: 15px;
+  padding-left: 50px;
+  padding-right: 50px;
+}

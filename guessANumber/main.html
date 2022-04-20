@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Guess a Number</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <div class="container center-align" id="startPage">
+    <h3>Guess A Number</h3>
+    <div class="divider"></div>
+    <h1></h1>
+    <a class="waves-effect waves-light btn orange darken-2" id="btn_start">Start</a>
+  </div>
+
+  <div id="game">
+    <h4 style="text-align: center" class="white-text">Guess a Number </h4>
+
+
+    <form action="">
+      <h5 style="text-align: center" class="white-text" id="hints">0~100</h5>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="number" type="number" min="1" max="100" class="validate white-text" placeholder="Enter a number">
+          <label for="number">Number</label>
+        </div>
+      </div>
+      <div class="center" id="btn">
+        <a class="waves-effect waves-light btn deep-orange darken-3" id="btn_restart" onclick="reset()">Restart</a>
+        <a class="waves-effect waves-light btn amber darken-3" id="btn_guess" onclick="checkAnswer();">Guess</a>
+      </div>
+    </form>
+
+  </div>
+  <div id="result" class=" orange lighten-2 center-align">
+    <h4>You Win!</h4>
+    <div>
+      <a class="waves-effect waves-light btn  orange darken-3" id="btn_again" onclick="playAgain();">Play Again</a>
+    </div>
+  </div>
+
+</body>
+
+</html>
+<script>
+  $(document).ready(function() {
+
+    $("#result").hide();
+    $("#game").hide();
+    $("#btn_start").click(function() {
+      $("#startPage").hide();
+      $("#result").hide();
+      $("#game").show();
+    })
+  })
+  let answer = Math.floor(Math.random() * 101);
+  let minNumber = 0;
+  let maxNumber = 100;
+
+  function checkAnswer() {
+    let user_Input = document.getElementById("number").value;
+    if (user_Input == answer) {
+      $("#result").show();
+      $("#game").hide();
+    } else if (user_Input == "") {
+      alert("Please input valid number");
+    } else if (user_Input < answer) {
+      minNumber = user_Input;
+      document.getElementById("hints").innerText = minNumber + " - " + maxNumber;
+    } else if (user_Input > answer) {
+      maxNumber = user_Input;
+      document.getElementById("hints").innerText = minNumber + " - " + maxNumber;
+    }
+
+  }
+
+  function reset() {
+    answer = Math.floor(Math.random() * 101);
+    minNumber = 0;
+    maxNumber = 100;
+    $('#number').val('');
+    document.getElementById("hints").innerText = minNumber + " - " + maxNumber;
+  }
+
+  function playAgain() {
+    answer = Math.floor(Math.random() * 101);
+    minNumber = 0;
+    maxNumber = 100;
+    $("#game").show();
+    $("#result").hide();
+    $('#number').val('');
+    document.getElementById("hints").innerText = minNumber + " - " + maxNumber;
+  }
+
+</script>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Four in a row</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/board.css">
+    <script src="findWinner.js"></script>
+    <script src="displayWinner.js"></script>
+    <script src="currentTurn.js"></script>
+    <script src="displayDraw.js"></script>
+    <script src="displayGameBoard.js"></script>
+    <script src="reset.js"></script>
+</head>
+
+<body>
+<div id="game">
+    <h4 style="text-align: center" class="white-text">Four in a row</h4>
+    <div id="displayTurn" class="center-align black">
+        <span id="black_turn">Black</span>
+        <span id="white_turn">White</span></div>
+
+    <div>
+        <table id="board">
+        <tr id="row">
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="row2">
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="row3">
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <tr id="row4">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="row5">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="row6">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="center" id="btn">
+        <a class="waves-effect waves-light btn green darken-4" id="btn_restart">Restart</a>
+    </div>
+</div>
+
+<div id="result" class=" blue-grey lighten-5 center-align">
+    <div id="displayWinner">
+
+    </div>
+    <div>
+        <a class="waves-effect waves-light btn green darken-4" id="btn_again">Play Again</a>
+    </div>
+</div>
+
+
+<div class="container center-align" id="startPage">
+    <h3>Welcome, Four in a row</h3>
+    <div class="divider"></div>
+    <h5></h5>
+
+    <a class="waves-effect waves-light btn green darken-4" id="btn_start">Start</a>
+
+    <div class="center" id="role">
+        <a class="waves-effect waves-light btn black darken-4 white-text " id="btn_black">Black</a>
+        <a class="waves-effect waves-light btn white black-text" id="btn_white">White</a>
+    </div>
+</div>
+
+
+</body>
+<script>
+    $(document).ready(function() {
+        var currentplayer = "";
+        var role = "";
+        var count = 0;
+
+        $("#game").hide();
+        $("#result").hide();
+        $("#role").hide();
+
+        // start game
+        $("#btn_start").click(function() {
+            $(this).hide();
+
+            $("#startPage h5").text("Select a role");
+            $("#role").show();
+
+            $("#btn_black").click(function() {
+                role = "Black";
+                currentplayer = role;
+                $("#black_turn").addClass("currentPlayer");
+            })
+
+            $("#btn_white").click(function() {
+                role = "White";
+                currentplayer = role;
+                $("#white_turn").addClass("currentPlayer");
+            })
+
+
+            $("#role").click(function() {
+                $("#startPage").hide();
+                $("#game").show();
+                $("#btn_cancel").hide();
+            })
+            $("#board td").mouseover(function() {
+                $(this).addClass("td_hover");
+            })
+                .mouseout(function() {
+                    $(this).removeClass("td_hover");
+                })
+
+        })
+
+        $("#board td").click(function() {
+            if ($(this).text() == "") {
+                count++;
+
+                if (currentplayer == "Black") {
+                    $(this).text(currentplayer).css({"backgroundColor": "Black", "color":"black"})
+                    currentTurn(currentplayer);
+                    currentplayer = "White";
+                } else {
+                    $(this).text(currentplayer).css({"backgroundColor": "White","color":"White" });
+                    currentTurn(currentplayer);
+                    currentplayer = "Black";
+                }
+            }
+            if (findWinner() != false) {
+                displayWinner();
+            } else if (findWinner() == false && count == 42)
+                displayDraw();
+        })
+
+
+        //reset game
+        $("#btn_restart").click(function() {
+            currentplayer = role;
+            reset(role);
+            count = 0;
+        })
+        // play again
+        $("#btn_again").click(function() {
+            $("#game").show();
+            $("#result").hide();
+            currentplayer = role;
+            count = 0;
+            reset(role);
+        })
+    });
+</script>
+
+</html>

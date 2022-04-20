@@ -1,0 +1,82 @@
+body {
+  background-color: #212121;
+}
+
+#game {
+  background-color: #263238;
+  width: 500px;
+}
+
+#game, #board {
+  margin: auto; 
+}
+
+
+#board {
+  width: 390px;
+  height: 390px;
+}
+
+td {
+  width: 130px;
+  height: 130px;
+  text-align: center;
+  font-size: 60px;
+  color: #00acc1;
+  border: 5px solid #546e7a;
+}
+
+.td_hover {
+  background-color: #607d8b;
+}
+
+#btn,
+#displayTurn,
+#x_turn,
+#o_turn,
+#result {
+  padding: 10px;
+}
+
+#displayTurn {
+  margin: 10px auto;
+  width: 200px;
+
+}
+
+#x_turn,
+#o_turn {
+  color: #eceff1 ;
+}
+
+#x_turn,
+#o_turn,
+#displayTurn {
+  border-radius: 10px;
+}
+
+.currentPlayer {
+  background-color: #00b8d4;
+}
+
+#result{
+  margin: 200px auto;
+}
+
+.container{
+  background-color: #263238;
+  border-radius: 30px;
+  padding: 10px;
+  color: #eceff1;
+  margin: 200px auto;
+}
+
+.btn{
+  border-radius: 15px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.td_attack{
+  background-color: #ff5252;
+}

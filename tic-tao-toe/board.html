@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="game.css">
+  <script src="findWinner.js"></script>
+  <script src="displayWinner.js"></script>
+  <script src="currentTurn.js"></script>
+  <script src="displayDraw.js"></script>
+
+
+</head>
+
+<body>
+  <div id="game">
+    <h4 style="text-align: center" class="white-text">Tic Tac Toe </h4>
+    <div id="displayTurn" class="center-align cyan darken-4">
+      <span id="x_turn">X Turn</span>
+      <span id="o_turn">O Turn</span></div>
+
+    <div>
+      <table id="board">
+        <tr id="row">
+          <td id="square_1"></td>
+          <td id="square_2"></td>
+          <td id="square_3"></td>
+        </tr>
+        <tr id="row2">
+          <td id="square_4"></td>
+          <td id="square_5"></td>
+          <td id="square_6"></td>
+        </tr>
+        <tr id="row3">
+          <td id="square_7"></td>
+          <td id="square_8"></td>
+          <td id="square_9"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="center" id="btn">
+      <a class="waves-effect waves-light btn cyan darken-3" id="btn_restart">Restart</a>
+      <a class="waves-effect waves-light btn red darken-3" id="btn_attack">Attack</a>
+      <a class="waves-effect waves-light btn blue-grey lighten-3" id="btn_cancel">Cancel</a>
+    </div>
+  </div>
+
+  <div id="result" class=" blue-grey lighten-5 center-align">
+    <div id="displayWinner">
+
+    </div>
+    <div>
+      <a class="waves-effect waves-light btn cyan darken-3" id="btn_again">Play Again</a>
+    </div>
+  </div>
+
+
+  <div class="container center-align" id="startPage">
+    <h3>Welcome, Tic-Tao-Toe</h3>
+    <div class="divider"></div>
+    <h5></h5>
+
+    <a class="waves-effect waves-light btn teal darken-3" id="btn_start">Start</a>
+
+    <div class="center" id="role">
+      <a class="waves-effect waves-light btn white cyan-text " id="btn_X">X</a>
+      <a class="waves-effect waves-light btn cyan darken-1" id="btn_O">O</a>
+    </div>
+  </div>
+
+
+</body>
+<script>
+  $(document).ready(function() {
+    var board = $("#board td");
+    var currentplayer = "";
+    var role = "";
+    var attack = false;
+    var count = 0;
+
+    $("#game").hide();
+    $("#result").hide();
+    $("#role").hide();
+
+    // start game
+    $("#btn_start").click(function() {
+      $(this).hide();
+
+      $("#startPage h5").text("Select a role");
+      $("#role").show();
+
+
+      $("#btn_X").click(function() {
+        role = "X";
+        currentplayer = role;
+        $("#x_turn").addClass("currentPlayer");
+      })
+
+      $("#btn_O").click(function() {
+        role = "O";
+        currentplayer = role;
+        $("#o_turn").addClass("currentPlayer");
+      })
+
+      
+      $("#role").click(function() {
+        $("#startPage").hide();
+        $("#game").show();
+        $("#btn_cancel").hide();
+      })
+      $("#board td").mouseover(function() {
+          $(this).addClass("td_hover");
+        })
+        .mouseout(function() {
+          $(this).removeClass("td_hover");
+        })
+
+    })
+
+    $("#board td").click(function() {
+      if ($(this).text() == "" && attack == false) {
+        count++;
+
+        if (currentplayer == "X") {
+          $(this).text(currentplayer).css("color", "white")
+          currentTurn(currentplayer);
+          currentplayer = "O";
+        } else {
+          $(this).text(currentplayer).css("color", "#00acc1");
+          currentTurn(currentplayer);
+          currentplayer = "X";
+        }
+      } else if ($(this).text() != "" && attack == true && $(this).text() != currentplayer) {
+
+        count -= 1;
+        attack = false;
+        $("#btn_cancel").hide();
+        $(this).empty();
+
+        if (currentplayer == "X") {
+          currentTurn(currentplayer);
+          currentplayer = "O";
+        } else {
+          currentTurn(currentplayer);
+          currentplayer = "X";
+        }
+
+        $("#board td").mouseover(function() {
+          $(this).removeClass("td_attack");
+        })
+      }
+      if (findWinner() != false) {
+        displayWinner();
+      } else if (findWinner() == false && count == 9)
+        displayDraw();
+    })
+
+
+    // attack
+    $("#btn_attack").click(function() {
+      attack = true;
+      $("#board td").mouseover(function() {
+          $(this).addClass("td_attack");
+        })
+        .mouseout(function() {
+          $(this).removeClass("td_attack");
+        })
+      $("#btn_cancel").show()
+        .click(function() {
+          $("#board td").mouseover(function() {
+            $(this).removeClass("td_attack");
+          })
+          attack = false;
+          $(this).hide();
+        });
+    })
+
+
+    //reset game
+    $("#btn_restart").click(function() {
+      attack = false;
+      currentplayer = role;
+      reset(role);
+      count = 0;
+    })
+    // play again
+    $("#btn_again").click(function() {
+      $("#game").show();
+      $("#result").hide();
+      currentplayer = role;
+      count = 0;
+      reset(role);
+    })
+  });
+</script>
+<script>
+  function reset(role) {
+    $("#btn_cancel").hide();
+    $("#board td").empty()
+      .mouseover(function() {
+        $(this).removeClass("td_attack");
+      })
+    if (role == "X") {
+      $("#x_turn").addClass("currentPlayer");
+      $("#o_turn").removeClass("currentPlayer");
+    } else {
+      $("#o_turn").addClass("currentPlayer");
+      $("#x_turn").removeClass("currentPlayer");
+    }
+
+  }
+</script></html>

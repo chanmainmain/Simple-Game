@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Connect Four</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/board.css">
+  <script src="findWinner.js"></script>
+  <script src="displayWinner.js"></script>
+  <script src="currentTurn.js"></script>
+  <script src="displayDraw.js"></script>
+  <script src="displayGameBoard.js"></script>
+</head>
+
+<body>
+  <div id="game">
+    <h4 style="text-align: center" class="white-text">Connect Four</h4>
+    <div id="displayTurn" class="center-align deep-orange accent-3">
+      <span id="red_turn">Red</span>
+      <span id="yellow_turn">Yellow</span></div>
+
+    <div>
+      <table id="board">
+        <tr id="row">
+          <td id="square_1"></td>
+
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="row2">
+
+          <td id="square_6"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="row3">
+
+          <td id="square_9"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="row4">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="row5">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr id="row6">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+
+    </div>
+    <div class="center" id="btn">
+      <a class="waves-effect waves-light btn light-blue lighten-3" id="btn_restart">Restart</a>
+    </div>
+  </div>
+
+  <div id="result" class=" blue-grey lighten-5 center-align">
+    <div id="displayWinner">
+
+    </div>
+    <div>
+      <a class="waves-effect waves-light btn light-blue lighten-3" id="btn_again">Play Again</a>
+    </div>
+  </div>
+
+
+  <div class="container center-align" id="startPage">
+    <h3>Welcome, Connect Four</h3>
+    <div class="divider"></div>
+    <h5></h5>
+
+    <a class="waves-effect waves-light btn light-blue lighten-3" id="btn_start">Start</a>
+
+    <div class="center" id="role">
+      <a class="waves-effect waves-light btn red darken-4 white-text " id="btn_Red">Red</a>
+      <a class="waves-effect waves-light btn yellow lighten-1 white-text" id="btn_Yellow">Yellow</a>
+    </div>
+  </div>
+
+
+</body>
+<script>
+  $(document).ready(function() {
+    var currentplayer = "";
+    var role = "";
+    var count = 0;
+
+    $("#game").hide();
+    $("#result").hide();
+    $("#role").hide();
+
+    // start game
+    $("#btn_start").click(function() {
+      $(this).hide();
+
+      $("#startPage h5").text("Select a role");
+      $("#role").show();
+
+      $("#btn_Red").click(function() {
+        role = "R";
+        currentplayer = role;
+        $("#red_turn").addClass("currentPlayer");
+      })
+
+      $("#btn_Yellow").click(function() {
+        role = "Y";
+        currentplayer = role;
+        $("#yellow_turn").addClass("currentPlayer");
+      })
+
+
+      $("#role").click(function() {
+        $("#startPage").hide();
+        $("#game").show();
+        $("#btn_cancel").hide();
+      })
+      $("#board td").mouseover(function() {
+          $(this).addClass("td_hover");
+        })
+        .mouseout(function() {
+          $(this).removeClass("td_hover");
+        })
+
+    })
+
+    let board = document.getElementById("board").rows;
+    let cell = document.getElementsByTagName("td");
+    for (let i = 0; i < cell.length; i++) {
+      cell[i].addEventListener('click', (e) => {
+        for (let k = board.length; k >= 0; k--) {
+          let chess = board[k - 1].cells[e.target.cellIndex];
+          if (chess.innerHTML == "") {
+            count++;
+
+            if (currentplayer == "R") {
+              chess.style.backgroundColor = "Red";
+              chess.style.color = "Red";
+              chess.innerHTML = "Red";
+              currentTurn(currentplayer);
+              currentplayer = "Y";
+              break;
+            } else {
+              chess.style.backgroundColor = "Yellow";
+              chess.style.color = "Yellow";
+              chess.innerHTML = "Yellow";
+              currentTurn(currentplayer);
+              currentplayer = "R";
+              break;
+            }
+          }
+        }
+        if (findWinner() != false) {
+          displayWinner();
+        } else if (findWinner() == false && count == 42)
+          displayDraw();
+      })
+
+    }
+   
+
+    //reset game
+    $("#btn_restart").click(function() {
+      currentplayer = role;
+      reset(role);
+      count = 0;
+    })
+    // play again
+    $("#btn_again").click(function() {
+      $("#game").show();
+      $("#result").hide();
+      currentplayer = role;
+      count = 0;
+      reset(role);
+    })
+  });
+
+</script>
+<script>
+  function reset(role) {
+     $("#board td").empty().css("backgroundColor","white");
+    if (role == "R") {
+      $("#red_turn").addClass("currentPlayer");
+      $("#yellow_turn").removeClass("currentPlayer");
+    } else {
+      $("#yellow_turn").addClass("currentPlayer");
+      $("#red_turn").removeClass("currentPlayer");
+    }
+
+  }
+
+
+</script>
+
+</html>
